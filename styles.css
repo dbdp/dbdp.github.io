@@ -59,9 +59,21 @@ h2 { margin-bottom: 12px; font-size: clamp(1.5rem, 3vw, 2.4rem); line-height: 1.
 .work-item { display: grid; gap: 4px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line); }
 .work-year { color: var(--muted); font-size: .8rem; font-weight: 700; }
 .work-item span:last-child { color: var(--muted); }
-.games-card { display: flex; align-items: end; justify-content: space-between; gap: 24px; background: var(--ink); color: #fff; }
+.games-card { display: flex; align-items: start; justify-content: space-between; gap: 24px; background: var(--ink); color: #fff; }
 .games-card p { color: #c5ccd3 !important; }
-.game-status { flex: 0 0 auto; padding: 8px 12px; color: #fff; border: 1px solid #607080; border-radius: 999px; font-size: .72rem; font-weight: 800; letter-spacing: .08em; }
+.game-panel { width: min(100%, 430px); padding: 16px; background: #202c39; border: 1px solid #3b4d5f; border-radius: 18px; }
+.game-toolbar { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 12px; color: #c5ccd3; font-size: .78rem; }
+.game-toolbar strong { color: #fff; }
+#game-board { display: block; width: 100%; height: auto; aspect-ratio: 1; background: #101820; border: 1px solid #3b4d5f; border-radius: 10px; image-rendering: pixelated; }
+.powerup-status { min-height: 24px; margin: 8px 0 0; color: #91d5ff !important; font-size: .8rem; text-align: center; }
+.game-actions { display: flex; gap: 8px; margin-top: 10px; }
+.game-actions button, .touch-controls button { color: #fff; background: #31526f; border: 1px solid #6d8eaa; border-radius: 8px; cursor: pointer; font: inherit; font-weight: 700; }
+.game-actions button { flex: 1; padding: 8px; font-size: .8rem; }
+.game-actions button:hover, .game-actions button:focus-visible, .touch-controls button:hover, .touch-controls button:focus-visible { background: var(--accent); }
+.game-actions button:disabled { cursor: not-allowed; opacity: .5; }
+.touch-controls { margin-top: 12px; text-align: center; }
+.touch-controls > button, .touch-controls > div button { width: 42px; height: 36px; margin: 2px; }
+.game-help { margin: 10px 0 0 !important; font-size: .72rem; text-align: center; }
 .site-footer { padding: 48px 5vw; color: var(--muted); text-align: center; font-size: .82rem; }
 
 @media (max-width: 600px) {
@@ -72,4 +84,11 @@ h2 { margin-bottom: 12px; font-size: clamp(1.5rem, 3vw, 2.4rem); line-height: 1.
   .hero { grid-template-columns: 1fr; gap: 24px; min-height: auto; padding: 64px 0 48px; }
   .avatar { width: 88px; height: 88px; border-radius: 24px; font-size: 1.5rem; }
   .games-card { align-items: start; flex-direction: column; }
+  .game-panel { width: 100%; }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  main { width: min(840px, 88vw); }
+  .site-header { padding-inline: 6vw; }
+  .site-nav { gap: 16px; }
 }

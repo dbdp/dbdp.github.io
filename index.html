@@ -12,8 +12,10 @@
     <a class="brand" href="#home" aria-label="홈으로 이동">SC</a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">메뉴</button>
     <nav id="site-nav" class="site-nav" aria-label="주요 메뉴">
-      <a href="#profile">Profile</a>
-      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
       <a href="#games">Games</a>
     </nav>
   </header>
@@ -28,13 +30,13 @@
       </div>
     </section>
 
-    <section id="profile" class="feed-card" aria-labelledby="profile-title">
+    <section id="about" class="feed-card" aria-labelledby="profile-title">
       <p class="card-label">PROFILE</p>
       <h2 id="profile-title">독특한 관점으로 단순함을 설계합니다.</h2>
       <p>전남대학교 수학과 졸업 후 2019년부터 안드로이드 애플리케이션을 개발하고 있습니다.</p>
     </section>
 
-    <section id="work" class="feed-card" aria-labelledby="work-title">
+    <section id="projects" class="feed-card" aria-labelledby="work-title">
       <p class="card-label">WORK</p>
       <h2 id="work-title">사용자의 하루에 연결되는 기능</h2>
       <div class="work-item">
@@ -44,17 +46,52 @@
       </div>
     </section>
 
+    <section id="experience" class="feed-card" aria-labelledby="experience-title">
+      <p class="card-label">EXPERIENCE</p>
+      <h2 id="experience-title">7년의 안드로이드 개발</h2>
+      <p>2019년 입사 이후 빅스비와 모드 및 루틴을 개발하며 안드로이드 애플리케이션 개발 경험을 쌓았습니다.</p>
+    </section>
+
+    <section id="contact" class="feed-card" aria-labelledby="contact-title">
+      <p class="card-label">CONTACT</p>
+      <h2 id="contact-title">조용히, 더 나은 기능으로 연결됩니다.</h2>
+      <p>이메일·SNS·포트폴리오 링크는 공개하지 않습니다.</p>
+    </section>
+
     <section id="games" class="games-card" aria-labelledby="games-title">
       <div>
         <p class="card-label">GAMES</p>
         <h2 id="games-title">잠깐, 플레이하시겠어요?</h2>
-        <p>키보드와 터치로 즐기는 지렁이 게임이 준비 중입니다.</p>
+        <p>키보드와 터치로 즐기는 지렁이 게임입니다. 알약을 먹으면 10초 동안 무적·속도 2배가 됩니다.</p>
       </div>
-      <span class="game-status" aria-label="게임 준비 상태">COMING SOON</span>
+      <div class="game-panel" aria-label="지렁이 게임">
+        <div class="game-toolbar">
+          <span>점수 <strong id="score">0</strong></span>
+          <span>최고 <strong id="high-score">0</strong></span>
+          <span id="game-status" role="status">준비</span>
+        </div>
+        <canvas id="game-board" width="400" height="400" aria-label="지렁이 게임 보드"></canvas>
+        <p id="powerup-status" class="powerup-status" role="status">알약: 없음</p>
+        <div class="game-actions">
+          <button id="start-game" type="button">시작</button>
+          <button id="pause-game" type="button" disabled>일시정지</button>
+          <button id="restart-game" type="button">재시작</button>
+        </div>
+        <div class="touch-controls" aria-label="모바일 방향 조작">
+          <button type="button" data-direction="up" aria-label="위로 이동">↑</button>
+          <div>
+            <button type="button" data-direction="left" aria-label="왼쪽으로 이동">←</button>
+            <button type="button" data-direction="down" aria-label="아래로 이동">↓</button>
+            <button type="button" data-direction="right" aria-label="오른쪽으로 이동">→</button>
+          </div>
+        </div>
+        <p class="game-help">방향키·WASD 또는 모바일 버튼으로 조작하세요.</p>
+      </div>
     </section>
   </main>
 
   <footer class="site-footer">© 2026 Choi Se-chan</footer>
   <script src="script.js" defer></script>
+  <script src="game.js" defer></script>
 </body>
 </html>
