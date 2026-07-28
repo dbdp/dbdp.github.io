@@ -124,6 +124,7 @@
       powerupTimerId = null;
       updatePowerupStatus();
       refreshTimerSpeed();
+      if (running) endGame();
     }, Math.max(0, invincibleUntil - now));
     updatePowerupStatus();
     refreshTimerSpeed();
@@ -138,24 +139,28 @@
 
   function tick() {
     direction = queuedDirection;
-    const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
-    const hitWall = head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize;
-    const hitSelf = snake.some((part) => part.x === head.x && part.y === head.y);
-    if (hitWall || (hitSelf && Date.now() >= invincibleUntil)) {
-      endGame();
-      return;
+    const nextDirection = { x: direction.x, y: direction.y };
+    let nextHead = { x: snake[0].x + nextDirection.x, y: snake[0].y + nextDirection.y };
+    if (nextHead.x < 0 || nextHead.x >= gridSize) {
+      nextDirection.x *= -1;
     }
+    if (nextHead.y < 0 || nextHead.y >= gridSize) {
+      nextDirection.y *= -1;
+    }
+    direction = nextDirection;
+    queuedDirection = nextDirection;
+    nextHead = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
 
     if (!reduceMotion) {
       trail.unshift({ x: snake[0].x, y: snake[0].y });
       trail = trail.slice(0, Math.min(16, 4 + speedMultiplier * 3));
     }
-    snake.unshift(head);
-    if (head.x === food.x && head.y === food.y) {
+    snake.unshift(nextHead);
+    if (nextHead.x === food.x && nextHead.y === food.y) {
       score += 10;
       food = randomFreeCell([pill]);
       updateScore();
-    } else if (head.x === pill.x && head.y === pill.y) {
+    } else if (nextHead.x === pill.x && nextHead.y === pill.y) {
       score += 25;
       pill = randomFreeCell([food]);
       activatePowerup();
@@ -182,6 +187,8 @@
     paused = !paused;
     if (paused) {
       stopTimer();
+      trail = [];
+      draw();
       statusElement.textContent = '일시정지';
       pauseButton.textContent = '계속';
     } else {
@@ -195,6 +202,7 @@
     running = false;
     paused = false;
     stopTimer();
+    trail = [];
     statusElement.textContent = '게임 오버';
     pauseButton.disabled = true;
     draw();
