@@ -12,10 +12,10 @@
   if (!canvas || !scoreElement || !highScoreElement || !statusElement || !powerupElement) return;
 
   const context = canvas.getContext('2d');
-  const gridSize = 20;
+  const gridSize = 40;
   const cellSize = canvas.width / gridSize;
   const baseSpeed = 220;
-  const fastSpeed = 110;
+  const maxSpeedMultiplier = 4;
   const directions = {
     up: { x: 0, y: -1 },
     down: { x: 0, y: 1 },
@@ -37,8 +37,11 @@
   let timerId = null;
   let powerupTimerId = null;
   let invincibleUntil = 0;
+  let speedMultiplier = 1;
+  let trail = [];
   let running = false;
   let paused = false;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   highScoreElement.textContent = String(highScore);
 
@@ -49,6 +52,8 @@
     direction = directions.right;
     queuedDirection = direction;
     score = 0;
+    speedMultiplier = 1;
+    trail = [];
     food = randomFreeCell();
     pill = randomFreeCell([food]);
     invincibleUntil = 0;
@@ -88,7 +93,7 @@
 
   function startTimer() {
     stopTimer();
-    timerId = window.setInterval(tick, Date.now() < invincibleUntil ? fastSpeed : baseSpeed);
+    timerId = window.setInterval(tick, Math.max(45, Math.round(baseSpeed / speedMultiplier)));
   }
 
   function stopTimer() {
@@ -111,6 +116,7 @@
 
   function activatePowerup() {
     const now = Date.now();
+    speedMultiplier = Math.min(maxSpeedMultiplier, speedMultiplier + 1);
     invincibleUntil = Math.max(now, invincibleUntil) + 10000;
     clearPowerupTimer();
     powerupTimerId = window.setTimeout(() => {
@@ -125,7 +131,9 @@
 
   function updatePowerupStatus() {
     const remaining = Math.max(0, invincibleUntil - Date.now());
-    powerupElement.textContent = remaining > 0 ? `알약 무적·속도 2배: ${Math.ceil(remaining / 1000)}초` : '알약: 없음';
+    powerupElement.textContent = remaining > 0
+      ? `알약 무적·속도 ${speedMultiplier}배: ${Math.ceil(remaining / 1000)}초`
+      : `알약: 없음 · 현재 속도 ${speedMultiplier}배`;
   }
 
   function tick() {
@@ -138,6 +146,10 @@
       return;
     }
 
+    if (!reduceMotion) {
+      trail.unshift({ x: snake[0].x, y: snake[0].y });
+      trail = trail.slice(0, Math.min(16, 4 + speedMultiplier * 3));
+    }
     snake.unshift(head);
     if (head.x === food.x && head.y === food.y) {
       score += 10;
@@ -207,6 +219,10 @@
       context.lineTo(canvas.width, i * cellSize);
       context.stroke();
     }
+    trail.forEach((cell, index) => {
+      const alpha = Math.max(0.025, (trail.length - index) / trail.length * 0.18 * speedMultiplier / maxSpeedMultiplier);
+      drawCell(cell, `rgba(114, 183, 255, ${alpha})`, 6);
+    });
     drawCell(food, '#55d88a', 8);
     drawCell(pill, '#f7c948', 8);
     snake.forEach((part, index) => drawCell(part, index === 0 ? '#72b7ff' : '#1877f2', 6));
